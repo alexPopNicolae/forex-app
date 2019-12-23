@@ -1,58 +1,127 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class='display'>
+    <h1>Forex charts</h1>
+    <div class='charts-container'>
+      <div class="chart">
+       <TestChart :series = "eurusd" pair="EUR/USD"/>
+      </div>
+      <div class="chart">
+        <TestChart :series = "gbpusd" pair="GBP/USD"/>
+      </div>
+      <div class="chart">
+         <TestChart :series = "audusd" pair="GBP/USD"/>
+      </div>
+
+      <h1>Realtime values: </h1>
+      <div class='fores-values'>
+        <div class='row'>
+          <div class='col'>EUR/USD: </div>
+          <div class='col'>{{lastEURUSD}}</div>
+        </div>
+        <div class='row'>
+          <div class='col'>GBP/USD: </div>
+          <div class='col'>{{lastGPBUSD}}</div>
+        </div>
+        <div class='row'>
+          <div class='col'>AUS/USD: </div>
+          <div class='col'>{{lastAUSUSD}}</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </template>
 
 <script>
+
+import TestChart from './TestChart';
+
 export default {
   name: 'HelloWorld',
+  components: {
+    TestChart
+  },
   props: {
-    msg: String
-  }
+    msg: String,
+    pair: String
+  },
+  data:function() { 
+    return {
+    lastEURUSD:1.1,
+    lastGPBUSD:1.2,
+    lastAUSUSD:1.3
+    }
+  },
+
+  created: function() {
+
+    setInterval(()=> {
+      this.lastEURUSD = Math.floor(Math.random() * 100)/100;
+      this.lastGPBUSD = Math.floor(Math.random() * 100)/100;
+      this.lastAUSUSD = Math.floor(Math.random() * 100)/100;  
+
+    this.eurusd[0].data.push(this.lastEURUSD);
+    this.gbpusd[0].data.push(this.lastGPBUSD);
+    this.audusd[0].data.push(this.lastAUSUSD)
+
+    }, 1000);
+  
+
+  },
+  computed: {
+  eurusd : function() {
+      return [{
+              name: 'EUR/USD',
+              data: [1.11, 1.2, 1.5, 1.6, 1.5, 2, 1.7, 1.65, 1.23, 1.33, 1.23, 1.1]
+          }];
+    },
+  gbpusd: function() {
+    return [{
+              name: 'GBP/USD',
+              data: [1.11, 1.2, 1.5, 1.6, 1.5, 2, 1.7, 1.65, 1.23, 1.33, 1.23, 1.1]
+          }];
+    },
+    audusd: function() {
+      return [{
+              name: 'AUD/USD',
+              data: [1.11, 1.2, 1.5, 1.6, 1.5, 2, 1.7, 1.65, 1.23, 1.33, 1.23, 1.1]
+      }];
+    }
+    }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+
+  h1 {
+    padding: 20px;
+  }
+
+  .display {
+    width: 1200px;
+    margin: 0 auto;
+  }
+  .chart {
+    width: 100%;
+    height: 500px;
+    margin: 20px;
+    border-radius: 3px;
+    color: white;
+  }
+
+.fores-values {
+  width: 300px;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.fores-values .row {
+  display: flex;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.fores-values .row .col{
+  width: 50%;
+  margin: 5px;
+  text-align: center;
+  border: 2px solid black;
 }
-a {
-  color: #42b983;
-}
+
 </style>
